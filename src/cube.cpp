@@ -42,6 +42,45 @@ Cube::Cube(
 	v7.TexCoord = { 1, 0 };
 
 	//LEFT
+	v8.Position = { -0.5, -0.5f, -0.5f };;
+	v8.Normal = { 0, 0, 1 };
+	v8.TexCoord = { 0, 0 };
+	v9.Position = { -0.5, -0.5f, 0.5f };
+	v9.Normal = { 0, 0, 1 };
+	v9.TexCoord = { 0, 1 };
+	v10.Position = {-0.5, 0.5f, 0.5f };
+	v10.Normal = { 0, 0, 1 };
+	v10.TexCoord = { 1, 1 };
+	v11.Position = { -0.5, 0.5f, -0.5f };
+	v11.Normal = { 0, 0, 1 };
+	v11.TexCoord = { 1, 0 };
+	//RIGHT
+	v12.Position = { 0.5, -0.5f, -0.5f };;
+	v12.Normal = { 0, 0, 1 };
+	v12.TexCoord = { 0, 0 };
+	v13.Position = { 0.5, -0.5f, 0.5f };
+	v13.Normal = { 0, 0, 1 };
+	v13.TexCoord = { 0, 1 };
+	v14.Position = { 0.5, 0.5f, 0.5f };
+	v14.Normal = { 0, 0, 1 };
+	v14.TexCoord = { 1, 1 };
+	v15.Position = { 0.5, 0.5f, -0.5f };
+	v15.Normal = { 0, 0, 1 };
+	v15.TexCoord = { 1, 0 };
+	//TOP
+	v20.Position = { -0.5, -0.5f, -0.5f };
+	v20.Normal = { 0, 0, 1 };
+	v20.TexCoord = { 0, 0 };
+	v21.Position = { 0.5, -0.5f, -0.5f };
+	v21.Normal = { 0, 0, 1 };
+	v21.TexCoord = { 0, 1 };
+	v22.Position = { 0.5, 0.5f, -0.5f };
+	v22.Normal = { 0, 0, 1 };
+	v22.TexCoord = { 1, 1 };
+	v23.Position = { -0.5, 0.5f, -0.5f };
+	v23.Normal = { 0, 0, 1 };
+	v23.TexCoord = { 1, 0 };
+	//BOTTOM
 	v8.Position = { -0.5, -0.5f, -0.5f };
 	v8.Normal = { 0, 0, 1 };
 	v8.TexCoord = { 0, 0 };
@@ -54,9 +93,6 @@ Cube::Cube(
 	v11.Position = { -0.5, 0.5f, -0.5f };
 	v11.Normal = { 0, 0, 1 };
 	v11.TexCoord = { 1, 0 };
-	//RIGHT
-	//TOP
-	//BOTTOM
 	vertices.push_back(v0);
 	vertices.push_back(v1);
 	vertices.push_back(v2);
