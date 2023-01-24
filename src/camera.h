@@ -38,7 +38,7 @@ public:
 	*/
 	void Move(const linalg::vec3f& direction) noexcept;
 
-	/*void Rotate(const float roll, const float yaw, const float pitch) noexcept;*/
+	void Rotate(const float roll, const float yaw, const float pitch) noexcept;
 
 	/**
 	 * @brief Changes the camera aspect ratio.

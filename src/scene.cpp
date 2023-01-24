@@ -71,6 +71,9 @@ void OurTestScene::Update(
 	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A))
 		m_camera->Move({ -m_camera_velocity * dt, 0.0f, 0.0f });
 
+	long mousedX = input_handler.GetMouseDeltaX();
+	long mousedY = input_handler.GetMouseDeltaY();
+	m_camera->Rotate(0, mousedY, mousedX);
 	// Now set/update object transformations
 	// This can be done using any sequence of transformation matrices,
 	// but the T*R*S order is most common; i.e. scale, then rotate, and then translate.
