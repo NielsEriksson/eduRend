@@ -50,7 +50,10 @@ void OurTestScene::Init()
 
 	// Create objects
 	m_quad = new Cube(m_dxdevice, m_dxdevice_context);
+	m_quad2 = new Cube(m_dxdevice, m_dxdevice_context);
+	m_quad3 = new Cube(m_dxdevice, m_dxdevice_context);
 	m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
+	m_trojan = new OBJModel("assets/trojan/trojan.obj", m_dxdevice, m_dxdevice_context);
 }
 
 //
@@ -84,12 +87,17 @@ void OurTestScene::Update(
 	m_quad_transform = mat4f::translation(0, 0, 0) *			// No translation
 		mat4f::rotation(-m_angle, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
 		mat4f::scaling(1.5, 1.5, 1.5);				// Scale uniformly to 150%
-
+	m_quad2_transform = m_quad_transform* ( mat4f::translation(3, 0, 0) *			// No translation
+		mat4f::rotation(-m_angle*0.5f, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
+		mat4f::scaling(0.5, 0.5, 0.5));
+	
 	// Sponza model-to-world transformation
 	m_sponza_transform = mat4f::translation(0, -5, 0) *		 // Move down 5 units
 		mat4f::rotation(fPI / 2, 0.0f, 1.0f, 0.0f) * // Rotate pi/2 radians (90 degrees) around y
 		mat4f::scaling(0.05f);						 // The scene is quite large so scale it down to 5%
-
+	m_trojan_transform = m_quad2_transform * (mat4f::translation(4, 0, 0) *			// No translation
+		mat4f::rotation(0, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
+		mat4f::scaling(0.1, 0.1, 0.1));
 	// Increment the rotation angle.
 	m_angle += m_angular_velocity * dt;
 
@@ -118,10 +126,15 @@ void OurTestScene::Render()
 	// Load matrices + the Quad's transformation to the device and render it
 	UpdateTransformationBuffer(m_quad_transform, m_view_matrix, m_projection_matrix);
 	m_quad->Render();
-
+	UpdateTransformationBuffer(m_quad2_transform, m_view_matrix, m_projection_matrix);
+	m_quad2->Render();
+	UpdateTransformationBuffer(m_quad3_transform, m_view_matrix, m_projection_matrix);
+	m_quad3->Render();
 	// Load matrices + Sponza's transformation to the device and render it
 	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
 	m_sponza->Render();
+	UpdateTransformationBuffer(m_trojan_transform, m_view_matrix, m_projection_matrix);
+	m_trojan->Render();
 }
 
 void OurTestScene::Release()
