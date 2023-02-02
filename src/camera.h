@@ -62,7 +62,7 @@ public:
 	*/
 	linalg::mat4f ProjectionMatrix() const noexcept;
 
-private:
+public:
 	// Aperture attributes
 	float m_vertical_fov;
 	float m_aspect_ratio;

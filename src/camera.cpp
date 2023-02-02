@@ -21,7 +21,7 @@ void Camera::Rotate(const float roll, const float yaw, const float pitch)noexcep
 
 	if (m_rotation.z > 2 / fPI) m_rotation.z = 2 / fPI; //limits to y rotation up
 	if (m_rotation.z < -2 / fPI) m_rotation.z = -2 / fPI; //and down
-	std::cout << m_rotation;
+
 }
 
 mat4f Camera::WorldToViewMatrix()  noexcept

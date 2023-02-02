@@ -31,6 +31,7 @@ OurTestScene::OurTestScene(
 	Scene(dxdevice, dxdevice_context, window_width, window_height)
 { 
 	InitTransformationBuffer();
+	InitCameraLightBuffer();
 	// + init other CBuffers
 }
 
@@ -137,6 +138,7 @@ void OurTestScene::Render()
 {
 	// Bind transformation_buffer to slot b0 of the VS
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
+	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_cameralight_buffer);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();
@@ -154,6 +156,8 @@ void OurTestScene::Render()
 	m_sponza->Render();
 	UpdateTransformationBuffer(m_trojan_transform, m_view_matrix, m_projection_matrix);
 	m_trojan->Render();
+
+	UpdateCameraLightBuffer({ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f },{0,0,0,0});
 }
 
 void OurTestScene::Release()
@@ -201,5 +205,28 @@ void OurTestScene::UpdateTransformationBuffer(
 	matrixBuffer->ModelToWorldMatrix = ModelToWorldMatrix;
 	matrixBuffer->WorldToViewMatrix = WorldToViewMatrix;
 	matrixBuffer->ProjectionMatrix = ProjectionMatrix;
+	m_dxdevice_context->Unmap(m_transformation_buffer, 0);
+}
+void OurTestScene::InitCameraLightBuffer()
+{
+	HRESULT hr;
+	D3D11_BUFFER_DESC matrixBufferDesc = { 0 };
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(TransformationBuffer);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+	ASSERT(hr = m_dxdevice->CreateBuffer(&matrixBufferDesc, nullptr, &m_cameralight_buffer));
+}
+
+void OurTestScene::UpdateCameraLightBuffer(vec4f cameraPos, vec4f ligthPos)
+{
+	// Map the resource buffer, obtain a pointer and then write our matrices to it
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(m_transformation_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	CameraLigthBuffer* matrixBuffer = (CameraLigthBuffer*)resource.pData;
+	matrixBuffer->CameraPos = cameraPos;
+	matrixBuffer->LigthPos = ligthPos;
 	m_dxdevice_context->Unmap(m_transformation_buffer, 0);
 }

@@ -1,4 +1,8 @@
-
+cbuffer CameraLigthBuffer : register(b0)
+{
+	vec4f CameraPos;
+	vec4f LightPos;
+};
 Texture2D texDiffuse : register(t0);
 
 struct PSIn
