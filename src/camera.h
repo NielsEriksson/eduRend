@@ -37,7 +37,7 @@ public:
 	 * @brief Move the camera along a vector
 	 * @param[in] direction Direction to move along
 	*/
-	void Move(const float) noexcept;
+	void Move(const linalg::vec3f& direction) noexcept;
 
 	void Rotate(const float roll, const float yaw, const float pitch) noexcept;
 
@@ -52,6 +52,7 @@ public:
 	 * @return World-to-View matrix.
 	*/
 	linalg::mat4f WorldToViewMatrix()  noexcept;
+	linalg::mat4f ViewToWorldMatrix()  noexcept;
 
 	/**
 	 * @brief get the Matrix transforming from View space to Clip space
@@ -79,7 +80,7 @@ private:
 	linalg::vec3f m_rotation;
 	linalg::vec3f m_direction;
 	linalg::mat4f matrixDirection;
-	float m_camera_velocity = 10.0f;	// Camera movement velocity in units/s
+		// Camera movement velocity in units/s
 };
 
 #endif

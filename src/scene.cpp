@@ -67,15 +67,33 @@ void OurTestScene::Update(
 	long mousedX = input_handler.GetMouseDeltaX();
 	long mousedY = input_handler.GetMouseDeltaY();
 	m_camera->Rotate(0, mousedY, mousedX);
+
+	vec4f forward = { 0.0f,0.0f,-m_camera_velocity * dt ,0.0f };
+	vec4f backward = { 0.0f,0.0f,m_camera_velocity * dt ,0.0f };
+	vec4f right = { m_camera_velocity * dt,0.0f,0.0f ,0.0f };
+	vec4f left = { -m_camera_velocity * dt,0.0f,0.0f ,0.0f };
+
 	// Basic camera control
 	if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
-		m_camera->Move(1);
+	{
+		vec4f worlddirection = m_camera->ViewToWorldMatrix() * forward;
+		m_camera->Move({worlddirection.x, worlddirection.y, worlddirection.z});
+	}
 	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S))
-		m_camera->Move(2);
+	{
+		vec4f worlddirection = m_camera->ViewToWorldMatrix() * backward;
+		m_camera->Move({ worlddirection.x, worlddirection.y, worlddirection.z });
+	}
 	if (input_handler.IsKeyPressed(Keys::Right) || input_handler.IsKeyPressed(Keys::D))
-		m_camera->Move(3);
+	{
+		vec4f worlddirection = m_camera->ViewToWorldMatrix() * right;
+		m_camera->Move({ worlddirection.x, worlddirection.y, worlddirection.z });
+	}
 	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A))
-		m_camera->Move(4);
+	{
+		vec4f worlddirection = m_camera->ViewToWorldMatrix() * left;
+		m_camera->Move({ worlddirection.x, worlddirection.y, worlddirection.z });
+	}
 
 
 	// Now set/update object transformations

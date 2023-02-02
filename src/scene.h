@@ -78,6 +78,7 @@ class OurTestScene : public Scene
 
 	// CBuffer for transformation matrices
 	ID3D11Buffer* m_transformation_buffer = nullptr;
+	ID3D11Buffer* m_cameralight_buffer = nullptr;
 	// + other CBuffers
 
 	//
@@ -103,12 +104,14 @@ class OurTestScene : public Scene
 	// Misc
 	float m_angle = 0;			// A per-frame updated rotation angle (radians)...
 	float m_angular_velocity = fPI / 2;	// ...and its velocity (radians/sec)
-
+	float m_camera_velocity = 10.0f;
 	float m_fps_cooldown = 0;
 
 	void InitTransformationBuffer();
 
 	void UpdateTransformationBuffer(mat4f model_to_world_matrix, mat4f world_to_view_matrix, mat4f projection_matrix);
+
+
 
 public:
 	/**
