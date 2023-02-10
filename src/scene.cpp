@@ -171,7 +171,7 @@ void OurTestScene::Release()
 
 	SAFE_RELEASE(m_transformation_buffer);
 	SAFE_RELEASE(m_cameralight_buffer);
-	SAFE_RELEASE(m_material_buffer);
+	SAFE_RELEASE(m_material_buffer); 
 
 	// + release other CBuffers
 }
