@@ -86,7 +86,7 @@ OBJModel::OBJModel(
 	SAFE_DELETE(mesh);
 }
 
-void OBJModel::Render() const
+void OBJModel::Render(ID3D11Buffer* material_buffer) const
 {
 	// Bind vertex buffer
 	const UINT32 stride = sizeof(Vertex);
@@ -102,6 +102,11 @@ void OBJModel::Render() const
 		// Fetch material
 		const Material& material = m_materials[indexRange.MaterialIndex];
 
+		UpdateMaterialBuffer(material_buffer,
+			(material.AmbientColour.x, material.AmbientColour.y, material.AmbientColour.z,1.0f),
+			(material.DiffuseColour.x, material.DiffuseColour.y, material.DiffuseColour.z, 1.0f),
+			(material.SpecularColour.x, material.SpecularColour.y, material.SpecularColour.z, 1.0f));
+
 		// Bind diffuse texture to slot t0 of the PS
 		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
 		// + bind other textures here, e.g. a normal map, to appropriate slots
@@ -110,6 +115,19 @@ void OBJModel::Render() const
 		m_dxdevice_context->DrawIndexed(indexRange.Size, indexRange.Start, 0);
 	}
 }
+void OBJModel::UpdateMaterialBuffer(ID3D11Buffer* material_buffer, 
+	vec4f Ambient, vec4f Diffuse, vec4f Specular) const
+{
+	// Map the resource buffer, obtain a pointer and then write our matrices to it
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(material_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	MaterialBuffer* matrixBuffer = (MaterialBuffer*)resource.pData;
+	matrixBuffer->Ambient = Ambient;
+	matrixBuffer->Diffuse = Diffuse;
+	matrixBuffer->Specular = Specular;
+	m_dxdevice_context->Unmap(material_buffer, 0);
+}
+
 
 OBJModel::~OBJModel()
 {

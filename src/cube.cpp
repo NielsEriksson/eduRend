@@ -204,7 +204,7 @@ Cube::Cube(
 }
 
 
-void Cube::Render() const
+void Cube::Render(ID3D11Buffer* material_buffer) const
 {
 	// Bind our vertex buffer
 	const UINT32 stride = sizeof(Vertex); //  sizeof(float) * 8;

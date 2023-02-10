@@ -45,7 +45,7 @@ public:
 	/**
 	 * @brief Abstract render method: must be implemented by derived classes
 	*/
-	virtual void Render() const = 0;
+	virtual void Render(ID3D11Buffer* material_buffer) const = 0;
 
 	/**
 	 * @brief Destructor.

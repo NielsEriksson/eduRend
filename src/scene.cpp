@@ -32,6 +32,7 @@ OurTestScene::OurTestScene(
 { 
 	InitTransformationBuffer();
 	InitCameraLightBuffer();
+	InitMaterialBuffer();
 	// + init other CBuffers
 }
 
@@ -139,6 +140,7 @@ void OurTestScene::Render()
 	// Bind transformation_buffer to slot b0 of the VS
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
 	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_cameralight_buffer);
+	m_dxdevice_context->PSSetConstantBuffers(1, 1, &m_material_buffer);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();
@@ -146,18 +148,19 @@ void OurTestScene::Render()
 
 	// Load matrices + the Quad's transformation to the device and render it
 	UpdateTransformationBuffer(m_quad_transform, m_view_matrix, m_projection_matrix);
-	m_quad->Render();
+	m_quad->Render(m_material_buffer);
 	UpdateTransformationBuffer(m_quad2_transform, m_view_matrix, m_projection_matrix);
-	m_quad2->Render();
+	m_quad2->Render(m_material_buffer);
 	UpdateTransformationBuffer(m_quad3_transform, m_view_matrix, m_projection_matrix);
-	m_quad3->Render();
+	m_quad3->Render(m_material_buffer);
 	// Load matrices + Sponza's transformation to the device and render it
 	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
-	m_sponza->Render();
+	m_sponza->Render(m_material_buffer);
 	UpdateTransformationBuffer(m_trojan_transform, m_view_matrix, m_projection_matrix);
-	m_trojan->Render();
+	m_trojan->Render(m_material_buffer);
 
-	UpdateCameraLightBuffer({ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f },{0,0,0,0});
+	UpdateCameraLightBuffer({ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f },
+		{0,0,0,0});
 }
 
 void OurTestScene::Release()
@@ -167,6 +170,9 @@ void OurTestScene::Release()
 	SAFE_DELETE(m_camera);
 
 	SAFE_RELEASE(m_transformation_buffer);
+	SAFE_RELEASE(m_cameralight_buffer);
+	SAFE_RELEASE(m_material_buffer);
+
 	// + release other CBuffers
 }
 
@@ -224,9 +230,21 @@ void OurTestScene::UpdateCameraLightBuffer(vec4f cameraPos, vec4f ligthPos)
 {
 	// Map the resource buffer, obtain a pointer and then write our matrices to it
 	D3D11_MAPPED_SUBRESOURCE resource;
-	m_dxdevice_context->Map(m_transformation_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	m_dxdevice_context->Map(m_cameralight_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	CameraLigthBuffer* matrixBuffer = (CameraLigthBuffer*)resource.pData;
 	matrixBuffer->CameraPos = cameraPos;
 	matrixBuffer->LigthPos = ligthPos;
-	m_dxdevice_context->Unmap(m_transformation_buffer, 0);
+	m_dxdevice_context->Unmap(m_cameralight_buffer, 0);
+}
+void OurTestScene::InitMaterialBuffer()
+{
+	HRESULT hr;
+	D3D11_BUFFER_DESC matrixBufferDesc = { 0 };
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(TransformationBuffer);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+	ASSERT(hr = m_dxdevice->CreateBuffer(&matrixBufferDesc, nullptr, &m_material_buffer));
 }

@@ -6,6 +6,7 @@
 
 #pragma once
 #include "Model.h"
+#include "Buffers.h"
 
 /**
  * @brief Model representing a 3D object.
@@ -44,7 +45,10 @@ public:
 	/**
 	 * @brief Renders the model.
 	*/
-	virtual void Render() const;
+	virtual void Render(ID3D11Buffer* material_buffer) const;
+
+	
+	virtual void UpdateMaterialBuffer(ID3D11Buffer* material_buffer, vec4f Ambient, vec4f Diffuse, vec4f Specular) const;
 
 	/**
 	 * @brief Destructor 

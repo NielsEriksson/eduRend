@@ -71,7 +71,7 @@ QuadModel::QuadModel(
 }
 
 
-void QuadModel::Render() const
+void QuadModel::Render(ID3D11Buffer* material_buffer) const
 {
 	// Bind our vertex buffer
 	const UINT32 stride = sizeof(Vertex); //  sizeof(float) * 8;

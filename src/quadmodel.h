@@ -25,7 +25,7 @@ public:
 	/**
 	 * @brief Render the model.
 	*/
-	virtual void Render() const;
+	virtual void Render(ID3D11Buffer* material_buffer) const;
 
 	/**
 	 *@brief Destructor. 

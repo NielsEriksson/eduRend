@@ -18,6 +18,12 @@ struct TransformationBuffer
 };
 struct CameraLigthBuffer
 {
-	linalg::vec4f CameraPos; //!<Camera Position.
-	linalg::vec4f LigthPos; //!< Ligth Source Position.
+	float4 CameraPos; //!<Camera Position.
+	float4 LigthPos; //!< Ligth Source Position.
+};
+struct MaterialBuffer
+{
+	float4 Ambient;
+	float4 Diffuse;
+	float4 Specular;
 };
