@@ -42,7 +42,7 @@ OurTestScene::OurTestScene(
 void OurTestScene::Init()
 {
 	m_camera = new Camera(
-		45.0f * fTO_RAD,		// field-of-view (radians)
+		70.0f * fTO_RAD,		// field-of-view (radians)
 		(float)m_window_width / m_window_height,	// aspect ratio
 		1.0f,					// z-near plane (everything closer will be clipped/removed)
 		500.0f);				// z-far plane (everything further will be clipped/removed)
