@@ -16,6 +16,8 @@ struct PSIn
 	float4 Pos  : SV_Position;
 	float3 Normal : NORMAL;
 	float2 TexCoord : TEX;
+	float3 WorldPos  :  POSITION0;
+
 };
 
 //-----------------------------------------------------------------------------------------
@@ -26,8 +28,15 @@ float4 PS_main(PSIn input) : SV_Target
 {
 	// Debug shading #1: map and return normal as a color, i.e. from [-1,1]->[0,1] per component
 	// The 4:th component is opacity and should be = 1
-	return float4(input.Normal*0.5+0.5, 1);
-//stufff here
+	float3 V = normalize(CameraPos.xyz - input.WorldPos);
+	float3 L = normalize(LightPos.xyz - input.WorldPos);
+	float3 N = normalize(input.Normal);
+	float3 R = normalize(reflect(-L, N));
+	return  (Diffuse * max(dot(L, N),0)) +(Specular * pow(max(dot(R,V),0), 50.0f));
+	
+
+	//return float4(Ambient, Diffuse, Specular, 1.0f);
+
 	
 	// Debug shading #2: map and return texture coordinates as a color (blue = 0)
 //	return float4(input.TexCoord, 0, 1);

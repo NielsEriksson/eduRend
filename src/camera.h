@@ -37,6 +37,7 @@ public:
 	 * @brief Move the camera along a vector
 	 * @param[in] direction Direction to move along
 	*/
+	void MoveForward(float input_direction, float dt) noexcept;
 	void Move(const linalg::vec3f& direction) noexcept;
 
 	void Rotate(const float roll, const float yaw, const float pitch) noexcept;
@@ -80,6 +81,7 @@ public:
 	linalg::vec3f m_rotation;
 	linalg::vec3f m_direction;
 	linalg::mat4f matrixDirection;
+	float m_camera_velocity = 5.0f;
 		// Camera movement velocity in units/s
 };
 

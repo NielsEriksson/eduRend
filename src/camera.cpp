@@ -55,3 +55,28 @@ mat4f Camera::ProjectionMatrix() const noexcept
 {
 	return mat4f::projection(m_vertical_fov, m_aspect_ratio, m_near_plane, m_far_plane);
 }
+void Camera::MoveForward(float input_direction, float dt) noexcept
+{
+	//move vectors
+	vec4f forward = { 0.0f, 0.0f, -m_camera_velocity * dt, 0.0f };
+	vec4f backward = { 0.0f, 0.0f, m_camera_velocity * dt, 0.0f };
+	vec4f left = { m_camera_velocity * dt, 0.0f, 0.0f , 0.0f };
+	vec4f right = { -m_camera_velocity * dt, 0.0f, 0.0f , 0.0f };
+
+	if (input_direction == 0) {     //move to camera
+		vec4f worldDirection = ViewToWorldMatrix() * forward; //moves where we are looking
+		Move({ worldDirection.x, worldDirection.y, worldDirection.z });
+	}
+	if (input_direction == 1) {
+		vec4f worldDirection = ViewToWorldMatrix() * backward;
+		Move({ worldDirection.x, worldDirection.y, worldDirection.z });
+	}
+	if (input_direction == 2) {
+		vec4f worldDirection = ViewToWorldMatrix() * left;
+		Move({ worldDirection.x, worldDirection.y, worldDirection.z });
+	}
+	if (input_direction == 3) {
+		vec4f worldDirection = ViewToWorldMatrix() * right;
+		Move({ worldDirection.x, worldDirection.y, worldDirection.z });
+	}
+}

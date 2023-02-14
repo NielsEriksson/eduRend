@@ -76,25 +76,17 @@ void OurTestScene::Update(
 	vec4f left = { -m_camera_velocity * dt,0.0f,0.0f ,0.0f };
 
 	// Basic camera control
-	if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
-	{
-		vec4f worlddirection = m_camera->ViewToWorldMatrix() * forward;
-		m_camera->Move({worlddirection.x, worlddirection.y, worlddirection.z});
+	if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W)) {     //move to camera
+		m_camera->MoveForward(0, dt);
 	}
-	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S))
-	{
-		vec4f worlddirection = m_camera->ViewToWorldMatrix() * backward;
-		m_camera->Move({ worlddirection.x, worlddirection.y, worlddirection.z });
+	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S)) {
+		m_camera->MoveForward(1, dt);
 	}
-	if (input_handler.IsKeyPressed(Keys::Right) || input_handler.IsKeyPressed(Keys::D))
-	{
-		vec4f worlddirection = m_camera->ViewToWorldMatrix() * right;
-		m_camera->Move({ worlddirection.x, worlddirection.y, worlddirection.z });
+	if (input_handler.IsKeyPressed(Keys::Right) || input_handler.IsKeyPressed(Keys::D)) {
+		m_camera->MoveForward(2, dt);
 	}
-	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A))
-	{
-		vec4f worlddirection = m_camera->ViewToWorldMatrix() * left;
-		m_camera->Move({ worlddirection.x, worlddirection.y, worlddirection.z });
+	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A)) {
+		m_camera->MoveForward(3, dt);
 	}
 
 
@@ -160,7 +152,7 @@ void OurTestScene::Render()
 	m_trojan->Render(m_material_buffer);
 
 	UpdateCameraLightBuffer({ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f },
-		{0,0,0,0});
+		{ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f });
 }
 
 void OurTestScene::Release()
@@ -218,7 +210,7 @@ void OurTestScene::InitCameraLightBuffer()
 	HRESULT hr;
 	D3D11_BUFFER_DESC matrixBufferDesc = { 0 };
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(TransformationBuffer);
+	matrixBufferDesc.ByteWidth = sizeof(CameraLigthBuffer);
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	matrixBufferDesc.MiscFlags = 0;
@@ -241,7 +233,7 @@ void OurTestScene::InitMaterialBuffer()
 	HRESULT hr;
 	D3D11_BUFFER_DESC matrixBufferDesc = { 0 };
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(TransformationBuffer);
+	matrixBufferDesc.ByteWidth = sizeof(MaterialBuffer);
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	matrixBufferDesc.MiscFlags = 0;

@@ -119,6 +119,7 @@ int WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE, _In_ LPWSTR, _I
 			};
 
 			ASSERT(create_shader(device, "shaders/vertex_shader.hlsl", "VS_main", SHADER_VERTEX, &inputDesc[0], 5, &vertexShader));
+			int foo = 10;
 			ASSERT(create_shader(device, "shaders/pixel_shader.hlsl", "PS_main", SHADER_PIXEL, nullptr, 0, &pixelShader));
 
 			scene = std::make_unique<OurTestScene>(
