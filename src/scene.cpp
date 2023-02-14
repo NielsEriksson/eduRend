@@ -54,7 +54,7 @@ void OurTestScene::Init()
 	m_quad = new Cube(m_dxdevice, m_dxdevice_context);
 	m_quad2 = new Cube(m_dxdevice, m_dxdevice_context);
 	m_quad3 = new Cube(m_dxdevice, m_dxdevice_context);
-	m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
+	m_sponza = new OBJModel("assets/crytek-sponza2/sponza.obj", m_dxdevice, m_dxdevice_context);
 	m_trojan = new OBJModel("assets/trojan/trojan.obj", m_dxdevice, m_dxdevice_context);
 }
 
@@ -107,7 +107,7 @@ void OurTestScene::Update(
 	// Sponza model-to-world transformation
 	m_sponza_transform = mat4f::translation(0, -5, 0) *		 // Move down 5 units
 		mat4f::rotation(fPI / 2, 0.0f, 1.0f, 0.0f) * // Rotate pi/2 radians (90 degrees) around y
-		mat4f::scaling(0.05f);						 // The scene is quite large so scale it down to 5%
+		mat4f::scaling(0.5f);						 // The scene is quite large so scale it down to 5%
 	m_trojan_transform = m_quad2_transform * (mat4f::translation(4, 0, 0) *			// No translation
 		mat4f::rotation(0, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
 		mat4f::scaling(0.1, 0.1, 0.1));
