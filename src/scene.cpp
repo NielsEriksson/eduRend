@@ -152,7 +152,7 @@ void OurTestScene::Render()
 	m_trojan->Render(m_material_buffer);
 
 	UpdateCameraLightBuffer({ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f },
-		{ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f });
+		{ 0,0,0,0.0f });
 }
 
 void OurTestScene::Release()

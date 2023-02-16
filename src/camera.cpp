@@ -19,8 +19,8 @@ void Camera::Rotate(const float roll, const float yaw, const float pitch)noexcep
 	float rotY = (yaw * fPI / 180.0f) / sensitivity;
 	m_rotation += vec3f(roll, rotX, rotY);
 
-	if (m_rotation.z > 2 / fPI) m_rotation.z = 2 / fPI; //limits to y rotation up
-	if (m_rotation.z < -2 / fPI) m_rotation.z = -2 / fPI; //and down
+	if (m_rotation.z > 3 / fPI) m_rotation.z = 3 / fPI; //limits to y rotation up
+	if (m_rotation.z < -3 / fPI) m_rotation.z = -3 / fPI; //and down
 
 }
 

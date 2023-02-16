@@ -33,10 +33,10 @@ float4 PS_main(PSIn input) : SV_Target
 	float3 N = normalize(input.Normal);
 	float3 R = normalize(reflect(-L, N));
 
-	float4 AmbientVector = Ambient;
+	float4 AmbientVector = Ambient* 0.003f;
 	float4 DiffuseVector = Diffuse * max(0.0f, dot(L, N));
 	float4 SpecularVector = Specular * pow(max(0.0f, dot(R, V)), 50.0f);
-	return ( DiffuseVector + SpecularVector );
+	return ( Ambient +DiffuseVector + SpecularVector )/3.5f;
 	
 
 
