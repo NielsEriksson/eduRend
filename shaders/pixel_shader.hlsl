@@ -10,6 +10,7 @@ cbuffer MaterialBuffer : register(b1)
 	float4 Specular;
 }
 Texture2D texDiffuse : register(t0);
+SamplerState texSampler : register(s0);
 
 struct PSIn
 {
@@ -34,9 +35,9 @@ float4 PS_main(PSIn input) : SV_Target
 	float3 R = normalize(reflect(-L, N));
 
 	float4 AmbientVector = Ambient* 0.003f;
-	float4 DiffuseVector = Diffuse * max(0.0f, dot(L, N));
+	float4 DiffuseVector = texDiffuse.Sample(texSampler, input.TexCoord) * max(0.0f, dot(L, N));
 	float4 SpecularVector = Specular * pow(max(0.0f, dot(R, V)), 50.0f);
-	return ( Ambient +DiffuseVector + SpecularVector )/3.5f;
+	return ( DiffuseVector + SpecularVector );
 	
 
 
