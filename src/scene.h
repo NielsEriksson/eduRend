@@ -80,6 +80,13 @@ class OurTestScene : public Scene
 	ID3D11Buffer* m_transformation_buffer = nullptr;
 	ID3D11Buffer* m_cameralight_buffer = nullptr;
 	ID3D11Buffer* m_material_buffer = nullptr;
+	ID3D11SamplerState* sampler;
+
+	D3D11_FILTER filters[3] = { D3D11_FILTER_MIN_MAG_MIP_POINT,D3D11_FILTER_MIN_MAG_MIP_LINEAR,D3D11_FILTER_ANISOTROPIC };
+
+
+	D3D11_TEXTURE_ADDRESS_MODE addresses[3] = { D3D11_TEXTURE_ADDRESS_WRAP,D3D11_TEXTURE_ADDRESS_MIRROR,D3D11_TEXTURE_ADDRESS_CLAMP };
+	
 	// + other CBuffers
 
 	//
@@ -115,6 +122,7 @@ class OurTestScene : public Scene
 	void InitCameraLightBuffer();
 	void UpdateCameraLightBuffer(vec4f cameraPos, vec4f ligthPos);
 	void InitMaterialBuffer();
+	void InitSampleState();
 
 public:
 	/**

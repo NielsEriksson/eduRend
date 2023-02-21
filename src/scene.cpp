@@ -33,6 +33,7 @@ OurTestScene::OurTestScene(
 	InitTransformationBuffer();
 	InitCameraLightBuffer();
 	InitMaterialBuffer();
+	InitSampleState();
 	// + init other CBuffers
 }
 
@@ -51,9 +52,8 @@ void OurTestScene::Init()
 	m_camera->MoveTo({ 0, 0, 5 });
 
 	// Create objects
-	m_quad = new Cube(m_dxdevice, m_dxdevice_context);
-	m_quad2 = new Cube(m_dxdevice, m_dxdevice_context);
-	m_quad3 = new Cube(m_dxdevice, m_dxdevice_context);
+	m_quad = new Cube(m_dxdevice,"assets/textures/crate.png", m_dxdevice_context);
+	m_quad2 = new Cube(m_dxdevice, "assets/textures/crate.png", m_dxdevice_context);
 	m_sponza = new OBJModel("assets/crytek-sponza2/sponza.obj", m_dxdevice, m_dxdevice_context);
 	m_trojan = new OBJModel("assets/trojan/trojan.obj", m_dxdevice, m_dxdevice_context);
 }
@@ -88,7 +88,26 @@ void OurTestScene::Update(
 	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A)) {
 		m_camera->MoveForward(3, dt);
 	}
+	//Change filter and address type
+	//if (input_handler.IsKeyPressed(Keys::F))
+	//{
+	//	
+	//	if (filter == 0) filter = 1;
+	//	else if (filter == 1) filter = 2;
+	//	else if (filter == 2) filter = 0;
 
+	//	InitSampleState();
+	//}
+	//if (input_handler.IsKeyPressed(Keys::M))
+	//{
+
+	//	if (adress == 0) adress = 1;
+	//	else if (adress ==1) adress = 2;
+	//	else if (adress == 2) adress = 0;
+
+	//	InitSampleState();
+	//}
+	
 
 	// Now set/update object transformations
 	// This can be done using any sequence of transformation matrices,
@@ -133,6 +152,7 @@ void OurTestScene::Render()
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
 	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_cameralight_buffer);
 	m_dxdevice_context->PSSetConstantBuffers(1, 1, &m_material_buffer);
+	m_dxdevice_context->PSSetSamplers(0, 1,&sampler);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();
@@ -143,8 +163,7 @@ void OurTestScene::Render()
 	m_quad->Render(m_material_buffer);
 	UpdateTransformationBuffer(m_quad2_transform, m_view_matrix, m_projection_matrix);
 	m_quad2->Render(m_material_buffer);
-	UpdateTransformationBuffer(m_quad3_transform, m_view_matrix, m_projection_matrix);
-	m_quad3->Render(m_material_buffer);
+
 	// Load matrices + Sponza's transformation to the device and render it
 	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
 	m_sponza->Render(m_material_buffer);
@@ -152,7 +171,7 @@ void OurTestScene::Render()
 	m_trojan->Render(m_material_buffer);
 
 	UpdateCameraLightBuffer({ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f },
-		{ 0,0,0,0.0f });
+		{ m_camera->m_position.x,m_camera->m_position.y, m_camera->m_position.z,0.0f });
 }
 
 void OurTestScene::Release()
@@ -239,4 +258,31 @@ void OurTestScene::InitMaterialBuffer()
 	matrixBufferDesc.MiscFlags = 0;
 	matrixBufferDesc.StructureByteStride = 0;
 	ASSERT(hr = m_dxdevice->CreateBuffer(&matrixBufferDesc, nullptr, &m_material_buffer));
+}
+void OurTestScene::InitSampleState() {
+	int filter = 0;
+	int adress = 1;
+	D3D11_SAMPLER_DESC samplerdesc =
+	{
+
+		//Filter
+		filters[filter],
+		//Address
+		addresses[adress],
+		addresses[adress],
+		addresses[adress],
+		//MipLODBias
+		0.0f,
+		//MaxAnisotropy
+		16,
+		//ComparisonFunc
+		D3D11_COMPARISON_NEVER,
+		//Border color
+		{1.0f,1.0f,1.0f,1.0f},
+		//MinLOD , MaxLOD
+		-FLT_MAX,
+		FLT_MAX,
+	};
+	m_dxdevice->CreateSamplerState(&samplerdesc, &sampler);
+	
 }

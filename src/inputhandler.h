@@ -12,7 +12,7 @@
 /**
  * @brief Keycodes
 */
-enum class Keys 
+enum class Keys
 {
 	Left = DIK_LEFT,
 	Right = DIK_RIGHT,
@@ -21,7 +21,9 @@ enum class Keys
 	W = DIK_W,
 	A = DIK_A,
 	S = DIK_S,
-	D = DIK_D
+	D = DIK_D,
+	F = DIK_F,
+	M = DIK_M
 };
 
 /**

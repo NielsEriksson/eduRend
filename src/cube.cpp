@@ -3,6 +3,7 @@
 
 Cube::Cube(
 	ID3D11Device* dxdevice,
+	const char* texturefile,
 	ID3D11DeviceContext* dxdevice_context)
 	: Model(dxdevice, dxdevice_context)
 {
@@ -202,22 +203,15 @@ Cube::Cube(
 
 	m_number_of_indices = (unsigned int)indices.size();
 	std::cout << "Loading textures..." << std::endl;
-	for (auto& material : m_materials)
-	{
-		HRESULT hr;
 
-		// Load Diffuse texture
-		//
-		if (material.DiffuseTextureFilename.size()) {
 
-			hr = LoadTextureFromFile(
-				dxdevice,
-				material.DiffuseTextureFilename.c_str(),
-				&material.DiffuseTexture);
-			std::cout << "\t" << material.DiffuseTextureFilename
-				<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
-		}
-	}
+	HRESULT hr = LoadTextureFromFile(
+		dxdevice,
+		texturefile,
+		&material.DiffuseTexture);
+	std::cout << "\t" << material.DiffuseTextureFilename
+		<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
+
 }
 
 
@@ -231,6 +225,25 @@ void Cube::Render(ID3D11Buffer* material_buffer) const
 	// Bind our index buffer
 	m_dxdevice_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
+		UpdateMaterialBuffer(material_buffer,
+			vec4f_gray,
+			vec4f_gray,
+			vec4f_gray);
+
+		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
 	// Make the drawcall
 	m_dxdevice_context->DrawIndexed(m_number_of_indices, 0, 0);
+
+}
+void Cube::UpdateMaterialBuffer(ID3D11Buffer* material_buffer,
+	vec4f Ambient, vec4f Diffuse, vec4f Specular) const
+{
+	// Map the resource buffer, obtain a pointer and then write our matrices to it
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(material_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	MaterialBuffer* matrixBuffer = (MaterialBuffer*)resource.pData;
+	matrixBuffer->Ambient = Ambient;
+	matrixBuffer->Diffuse = Diffuse;
+	matrixBuffer->Specular = Specular;
+	m_dxdevice_context->Unmap(material_buffer, 0);
 }

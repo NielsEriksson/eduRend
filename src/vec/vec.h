@@ -594,6 +594,8 @@ namespace linalg
     const vec2f vec2f_zero = vec2f(0, 0); //!< Compile-time zero initialized vec2f
     const vec3f vec3f_zero = vec3f(0, 0, 0); //!< Compile-time zero initialized vec3f
     const vec4f vec4f_zero = vec4f(0, 0, 0, 0); //!< Compile-time zero initialized vec4f
+    const vec4f vec4f_gray = vec4f(0.33, 0.33, 0.33, 1); //!< Compile-time zero initialized vec4f
+
 }
 
 #endif /* VEC_H */

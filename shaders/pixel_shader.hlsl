@@ -12,6 +12,8 @@ cbuffer MaterialBuffer : register(b1)
 Texture2D texDiffuse : register(t0);
 SamplerState texSampler : register(s0);
 
+
+
 struct PSIn
 {
 	float4 Pos  : SV_Position;
