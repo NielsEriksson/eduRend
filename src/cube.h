@@ -15,8 +15,6 @@ public:
 	Material material;
 
 	virtual void Render(ID3D11Buffer* material_buffer) const;
-
-
 	~Cube() { }
 	void UpdateMaterialBuffer(ID3D11Buffer* material_buffer,
 		vec4f Ambient, vec4f Diffuse, vec4f Specular) const;

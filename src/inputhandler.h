@@ -22,8 +22,13 @@ enum class Keys
 	A = DIK_A,
 	S = DIK_S,
 	D = DIK_D,
-	F = DIK_F,
-	M = DIK_M
+	One = DIK_1,
+	Two = DIK_2,
+	Three = DIK_3,
+	Four = DIK_4,
+	Five = DIK_5,
+	Six = DIK_6
+
 };
 
 /**

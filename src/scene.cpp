@@ -52,7 +52,7 @@ void OurTestScene::Init()
 	m_camera->MoveTo({ 0, 0, 5 });
 
 	// Create objects
-	m_quad = new Cube(m_dxdevice,"assets/textures/crate.png", m_dxdevice_context);
+	m_quad = new Cube(m_dxdevice,"assets/textures/wood.png", m_dxdevice_context);
 	m_quad2 = new Cube(m_dxdevice, "assets/textures/crate.png", m_dxdevice_context);
 	m_sponza = new OBJModel("assets/crytek-sponza2/sponza.obj", m_dxdevice, m_dxdevice_context);
 	m_trojan = new OBJModel("assets/trojan/trojan.obj", m_dxdevice, m_dxdevice_context);
@@ -89,25 +89,12 @@ void OurTestScene::Update(
 		m_camera->MoveForward(3, dt);
 	}
 	//Change filter and address type
-	//if (input_handler.IsKeyPressed(Keys::F))
-	//{
-	//	
-	//	if (filter == 0) filter = 1;
-	//	else if (filter == 1) filter = 2;
-	//	else if (filter == 2) filter = 0;
-
-	//	InitSampleState();
-	//}
-	//if (input_handler.IsKeyPressed(Keys::M))
-	//{
-
-	//	if (adress == 0) adress = 1;
-	//	else if (adress ==1) adress = 2;
-	//	else if (adress == 2) adress = 0;
-
-	//	InitSampleState();
-	//}
-	
+	if (input_handler.IsKeyPressed(Keys::One))	{filter = 0; InitSampleState();}
+	if (input_handler.IsKeyPressed(Keys::Two))	{filter = 1;InitSampleState();}	
+	if (input_handler.IsKeyPressed(Keys::Three)){filter = 2;InitSampleState();}	
+	if (input_handler.IsKeyPressed(Keys::Four)) {address = 0;InitSampleState();}	
+	if (input_handler.IsKeyPressed(Keys::Five)) {address =1;InitSampleState();}
+	if (input_handler.IsKeyPressed(Keys::Six))	{address = 2;InitSampleState();}	
 
 	// Now set/update object transformations
 	// This can be done using any sequence of transformation matrices,
@@ -260,17 +247,16 @@ void OurTestScene::InitMaterialBuffer()
 	ASSERT(hr = m_dxdevice->CreateBuffer(&matrixBufferDesc, nullptr, &m_material_buffer));
 }
 void OurTestScene::InitSampleState() {
-	int filter = 0;
-	int adress = 1;
+
 	D3D11_SAMPLER_DESC samplerdesc =
 	{
 
 		//Filter
 		filters[filter],
 		//Address
-		addresses[adress],
-		addresses[adress],
-		addresses[adress],
+		addresses[address],
+		addresses[address],
+		addresses[address],
 		//MipLODBias
 		0.0f,
 		//MaxAnisotropy

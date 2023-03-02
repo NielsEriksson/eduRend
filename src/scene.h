@@ -87,6 +87,8 @@ class OurTestScene : public Scene
 
 	D3D11_TEXTURE_ADDRESS_MODE addresses[3] = { D3D11_TEXTURE_ADDRESS_WRAP,D3D11_TEXTURE_ADDRESS_MIRROR,D3D11_TEXTURE_ADDRESS_CLAMP };
 	
+	int filter = 0;
+	int address = 1;
 	// + other CBuffers
 
 	//

@@ -187,6 +187,7 @@ Cube::Cube(
 	dxdevice->CreateBuffer(&vertexbufferDesc, &vertexData, &m_vertex_buffer);
 	SETNAME(m_vertex_buffer, "VertexBuffer");
 
+
 	//  Index array descriptor
 	D3D11_BUFFER_DESC indexbufferDesc = { 0 };
 	indexbufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -235,6 +236,7 @@ void Cube::Render(ID3D11Buffer* material_buffer) const
 	m_dxdevice_context->DrawIndexed(m_number_of_indices, 0, 0);
 
 }
+
 void Cube::UpdateMaterialBuffer(ID3D11Buffer* material_buffer,
 	vec4f Ambient, vec4f Diffuse, vec4f Specular) const
 {

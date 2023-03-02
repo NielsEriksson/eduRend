@@ -45,6 +45,8 @@ public:
 	/**
 	 * @brief Renders the model.
 	*/
+	void compute_TB(Vertex& v0, Vertex& v1, Vertex& v2);
+
 	virtual void Render(ID3D11Buffer* material_buffer) const;
 
 	

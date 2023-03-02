@@ -15,6 +15,7 @@
 #include "Drawcall.h"
 #include "OBJLoader.h"
 #include "Texture.h"
+#include "objloader.h"
 
 using namespace linalg;
 
@@ -39,18 +40,22 @@ public:
 	 * @param dxdevice ID3D11Device to be used in the model.
 	 * @param dxdevice_context ID3D11DeviceContext to be used in the model.
 	*/
+
 	Model(ID3D11Device* dxdevice, ID3D11DeviceContext* dxdevice_context) 
 		:	m_dxdevice(dxdevice), m_dxdevice_context(dxdevice_context) { }
 
 	/**
 	 * @brief Abstract render method: must be implemented by derived classes
 	*/
+	
+
 	virtual void Render(ID3D11Buffer* material_buffer) const = 0;
 
 	/**
 	 * @brief Destructor.
 	 * @details Releases the vertex and index buffers of the Model.
 	*/
+
 	virtual ~Model()
 	{ 
 		SAFE_RELEASE(m_vertex_buffer);

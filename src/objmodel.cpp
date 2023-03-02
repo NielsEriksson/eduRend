@@ -28,6 +28,11 @@ OBJModel::OBJModel(
 
 		indexOffset = (unsigned int)indices.size();
 	}
+	for (int i = 0; i < indices.size(); i += 3) // For all triangles
+		compute_TB(
+			mesh->Vertices[indices[i + 0]],
+			mesh->Vertices[indices[i + 1]],
+			mesh->Vertices[indices[i + 2]]);
 
 	// Vertex array descriptor
 	D3D11_BUFFER_DESC vertexbufferDesc = { 0 };
@@ -82,6 +87,25 @@ OBJModel::OBJModel(
 		// ...
 	}
 	std::cout << "Done." << std::endl;
+	for (auto& material : m_materials)
+	{
+		HRESULT hr;
+
+		// Load Diffuse texture
+		//
+		if (material.NormalTextureFilename.size()) {
+
+			hr = LoadTextureFromFile(
+				dxdevice,
+				material.NormalTextureFilename.c_str(),
+				&material.NormalTexture);
+		
+		}
+
+		// + other texture types here - see Material class
+		// ...
+	}
+	std::cout << "Done." << std::endl;
 
 	SAFE_DELETE(mesh);
 }
@@ -109,6 +133,7 @@ void OBJModel::Render(ID3D11Buffer* material_buffer) const
 
 		// Bind diffuse texture to slot t0 of the PS
 		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
+		m_dxdevice_context->PSSetShaderResources(1, 1, &material.NormalTexture.TextureView);
 		// + bind other textures here, e.g. a normal map, to appropriate slots
 
 		// Make the drawcall
@@ -127,7 +152,23 @@ void OBJModel::UpdateMaterialBuffer(ID3D11Buffer* material_buffer,
 	matrixBuffer->Specular = Specular;
 	m_dxdevice_context->Unmap(material_buffer, 0);
 }
+void OBJModel::compute_TB(Vertex& v0, Vertex& v1, Vertex& v2)
+{
+	vec3f tangent, binormal;
+	vec3f D, E;
+	vec2f F, G;
+	D = v1.Position - v0.Position;
+	E = v2.Position - v0.Position;
+	F = v1.TexCoord - v0.TexCoord;
+	G = v2.TexCoord - v0.TexCoord;
+	float det = 1 / (F.x * G.y - F.y * G.x);
 
+	tangent = (D * G.y + E * -F.y) * det;
+	binormal = (D * -G.x + E * F.x) * det;
+
+	v0.Tangent = v1.Tangent = v2.Tangent = normalize(tangent);
+	v0.Binormal = v1.Binormal = v2.Binormal = normalize(binormal);
+}
 
 OBJModel::~OBJModel()
 {
